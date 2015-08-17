@@ -1,0 +1,2 @@
+C:\Users\Jamal\Desktop\Buhtigfehlerverfolgungssystem\buhtig\bin\Debug\buhtig.exe.config
+C:\Users\UniUser\Desktop\buhtig\buhtig\bin\Debug\buhtig.exe.config
