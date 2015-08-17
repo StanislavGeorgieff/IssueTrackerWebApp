@@ -23,6 +23,10 @@
                     return tracker.RegisterUser(endpoint.parametern["username"], endpoint.parametern["password"], endpoint.parametern["confirmPassword"]);
                 case "LoginUser":
                     return tracker.LoginUser(endpoint.parametern["username"], endpoint.parametern["password"]);
+
+                case "LogoutUser":
+                    return tracker.LogoutUser();
+
                 case "CreateIssue":
                     return tracker.CreateIssue(endpoint.parametern["title"], endpoint.parametern["description"],
                         (IssuePriority)System.Enum.Parse(typeof(IssuePriority), endpoint.parametern["priority"], true),

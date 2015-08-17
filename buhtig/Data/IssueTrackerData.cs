@@ -23,7 +23,7 @@
             kommentaren = new Dictionary<Comment, User>();
         }
 
-        public User TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem { get; set; }
+        public User CurrentUser { get; set; }
         public IDictionary<string, User> users_dict { get; set; }
         public MultiDictionary<Issue, string> issues { get; set; }
         public OrderedDictionary<int, Issue> issues1 { get; set; }

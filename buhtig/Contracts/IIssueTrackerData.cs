@@ -6,7 +6,7 @@
 
     interface IIssueTrackerData
     {
-        User TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem { get; set; }
+        User CurrentUser { get; set; }
         IDictionary<string, User> users_dict { get; }
         OrderedDictionary<int, Issue> issues1 { get; }
         MultiDictionary<string, Issue> issues2 { get; }

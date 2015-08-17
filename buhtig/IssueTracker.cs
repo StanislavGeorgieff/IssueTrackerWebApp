@@ -19,7 +19,7 @@
         IssueTrackerData Data { get; set; }
         public string RegisterUser(string username, string password, string confirmPassword)
         {
-            if (Data.TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem == null)
+            if (Data.CurrentUser != null)
                 return string.Format("There is already a logged in user");
             if (password != confirmPassword)
                 return string.Format("The provided passwords do not match", username);
@@ -30,14 +30,14 @@
         }
         public string LoginUser(string username, string password)
         {
-            if (Data.TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem == null)
+            if (Data.CurrentUser != null)
                 return string.Format("There is already a logged in user");
             if (!Data.users_dict.ContainsKey(username))
                 return string.Format("A user with username {0} does not exist", username);
             var user = Data.users_dict[username];
             if (user.Passwort_hash != User.HashPassword(password))
                 return string.Format("The password is invalid for user {0}", username);
-            Data.TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem = user;
+            Data.CurrentUser = user;
 
 
 
@@ -45,37 +45,37 @@
         }
         public string LogoutUser()
         {
-            if (Data.TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem == null)
+            if (Data.CurrentUser == null)
             {
                 return string.Format("There is no currently logged in user");
             }
-            string username = Data.TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem.User_name;
-            Data.TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem = null;
+            string username = Data.CurrentUser.User_name;
+            Data.CurrentUser = null;
             return string.Format("User {0} logged out successfully", username);
         }
         //NE TE CHUVAM
         public string CreateIssue(string title, string description, IssuePriority priority, string[] strings)
         {
-            if (Data.TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem == null)
+            if (Data.CurrentUser == null)
                 return string.Format("There is no currently logged in user");
 
             var issue = new Issue(title, description, priority, strings.Distinct().ToList()); issue.Id = Data.nextIssueId; Data.issues1.Add(issue.Id, issue); Data.nextIssueId++;
-            Data.issues2[Data.TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem.User_name].Add(issue);
+            Data.issues2[Data.CurrentUser.User_name].Add(issue);
             foreach (var tag in issue.Tags)
                 Data.issues4[tag].Add(issue);
             return string.Format("Issue {0} created successfully.", issue.Id);
         }
         public string RemoveIssue(int issueId)
         {
-            if (Data.TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem == null)
+            if (Data.CurrentUser == null)
                 return string.Format("There is no currently logged in user");
             if (!Data.issues1.ContainsKey(issueId))
                 return string.Format("There is no issue with ID {0}", issueId);
             var issue = Data.issues1[issueId];
-            if (!Data.issues2[Data.TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem.User_name].Contains(issue))
-                return string.Format("The issue with ID {0} does not belong to user {1}", issueId, this.Data.TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem.User_name);
+            if (!Data.issues2[Data.CurrentUser.User_name].Contains(issue))
+                return string.Format("The issue with ID {0} does not belong to user {1}", issueId, this.Data.CurrentUser.User_name);
 
-            Data.issues2[Data.TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem.User_name].Remove(issue);
+            Data.issues2[Data.CurrentUser.User_name].Remove(issue);
             foreach (var tag in issue.Tags)
                 Data.issues4[tag].Remove(issue);
             Data.issues1.Remove(issue.Id);
@@ -83,7 +83,7 @@
         }
         public string AddComment(int intValue, string stringValue)
         {
-            if (Data.TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem == null)
+            if (Data.CurrentUser == null)
             {
                 return string.Format("There is no currently logged in user");
             }
@@ -92,17 +92,17 @@
                 return string.Format("There is no issue with ID {0}", intValue + 1);
             }
             var issue = Data.issues1[intValue];
-            var comment = new Comment(Data.TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem, stringValue);
+            var comment = new Comment(Data.CurrentUser, stringValue);
             issue.AddComment(comment);
-            Data.dict[Data.TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem].Add(comment);
+            Data.dict[Data.CurrentUser].Add(comment);
             return string.Format("Comment added successfully to issue {0}", issue.Id);
         }
         public string GetMyIssues()
         {
-            if (Data.TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem == null)
+            if (Data.CurrentUser == null)
                 return string.Format("There is no currently logged in user");
 
-            var issues = Data.issues2[Data.TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem.User_name];
+            var issues = Data.issues2[Data.CurrentUser.User_name];
             var newIssues = issues;
             if (!newIssues.Any())
             {
@@ -115,13 +115,13 @@
         }
         public string GetMyComments()
         {
-            if (Data.TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem == null)
+            if (Data.CurrentUser == null)
                 return string.Format("There is no currently logged in user");
             var comments = new List<Comment>();
             Data.issues1.Select(i => i.Value.Comments).ToList()
                 .ForEach(item => comments.AddRange(item));
             var resultComments = comments
-                .Where(c => c.Author.User_name == Data.TheUserWhichHasCurrentlyLoggedIntoTheIssueTrackingSystem.User_name)
+                .Where(c => c.Author.User_name == Data.CurrentUser.User_name)
                 .ToList();
             var strings = resultComments
                 .Select(x => x.ToString());

@@ -24,16 +24,16 @@
             while (true)
             {
                 string url = Console.ReadLine();
-                if (url != null) break;
+                if (url == null) break;
                 url = url.Trim();
-                if (string.IsNullOrEmpty(url))
+                if (!string.IsNullOrEmpty(url))
                     try
                     {
                         var ep = new EndPoint(url);
                         string viewResult = this.d.DispatchAction(ep);
-                        System.Console.WriteLine(viewResult);
+                        Console.WriteLine(viewResult);
                     }
-                    catch (System.Exception ex)
+                    catch (Exception ex)
                     {
                         Console.WriteLine(ex.Message);
                     }
