@@ -1,6 +1,6 @@
 ﻿namespace IssueTrackerWebApp.Contracts
 {
-    interface IEngine
+    public interface IEngine
     {
         void Run();
     }

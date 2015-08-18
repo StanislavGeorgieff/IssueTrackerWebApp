@@ -4,7 +4,11 @@
 
     public interface IEndPoint
     {
-        string aktionname { get; } 
-        IDictionary<string, string> parametern { get; }
+        string ActionName
+        {
+            get;
+        }
+
+        IDictionary<string, string> Parameters { get; }
     }
 }
