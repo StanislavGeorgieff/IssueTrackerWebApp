@@ -7,6 +7,7 @@
     using IssueTrackerWebApp.Contracts;
     using IssueTrackerWebApp.Data;
     using Models;
+
     /// <summary>
     /// 
     /// </summary>
