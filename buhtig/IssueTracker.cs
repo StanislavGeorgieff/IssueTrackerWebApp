@@ -21,8 +21,8 @@
             : this(new IssueTrackerData())
         {
         }
-        IssueTrackerData Data { get; set; }
-        
+        IIssueTrackerData Data { get; set; }
+
         /// <summary>
         /// Method that registers users.
         /// </summary>
