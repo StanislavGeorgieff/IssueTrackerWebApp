@@ -7,7 +7,9 @@
     using IssueTrackerWebApp.Contracts;
     using IssueTrackerWebApp.Data;
     using Models;
-
+    /// <summary>
+    /// 
+    /// </summary>
     public class IssueTracker : IIssueTracker
     {
         public IssueTracker(IIssueTrackerData data)
@@ -18,11 +20,16 @@
         public IssueTracker()
             : this(new IssueTrackerData())
         {
-            
         }
-
         IssueTrackerData Data { get; set; }
-
+        
+        /// <summary>
+        /// Method that registers users.
+        /// </summary>
+        /// <param name="username">username as string</param>
+        /// <param name="password">password as string</param>
+        /// <param name="confirmPassword">verification password as string</param>
+        /// <returns>registration result as string</returns>
         public string RegisterUser(string username, string password, string confirmPassword)
         {
             if (this.Data.CurrentUser != null)
