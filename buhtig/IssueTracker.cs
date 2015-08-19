@@ -22,7 +22,8 @@
             : this(new IssueTrackerData())
         {
         }
-        IIssueTrackerData Data { get; set; }
+
+        public IIssueTrackerData Data { get; set; }
 
         /// <summary>
         /// Method that registers users.
@@ -43,13 +44,13 @@
                 return string.Format("The provided passwords do not match", username);
             }
 
-            if (this.Data.users_dict.ContainsKey(username))
+            if (this.Data.UsersByName.ContainsKey(username))
             {
                 return string.Format("A user with username {0} already exists", username);
             }
 
             var user = new User(username, password);
-            this.Data.users_dict.Add(username, user);
+            this.Data.UsersByName.Add(username, user);
             return string.Format("User {0} registered successfully", username);
         }
 
@@ -60,12 +61,12 @@
                 return string.Format("There is already a logged in user");
             }
 
-            if (!this.Data.users_dict.ContainsKey(username))
+            if (!this.Data.UsersByName.ContainsKey(username))
             {
                 return string.Format("A user with username {0} does not exist", username);
             }
 
-            var user = this.Data.users_dict[username];
+            var user = this.Data.UsersByName[username];
             if (user.HashPassword != HashUtilities.HashPassword(password))
             {
                 return string.Format("The password is invalid for user {0}", username);
@@ -107,13 +108,13 @@
                 return string.Format("There is no currently logged in user");
             }
 
-            if (!this.Data.issues1.ContainsKey(issueId))
+            if (!this.Data.IssueById.ContainsKey(issueId))
             {
                 return string.Format("There is no issue with ID {0}", issueId);
             }
 
-            var issue = this.Data.issues1[issueId];
-            if (!this.Data.issues2[this.Data.CurrentUser.UserName].Contains(issue))
+            var issue = this.Data.IssueById[issueId];
+            if (!this.Data.IssuesByUsers[this.Data.CurrentUser.UserName].Contains(issue))
             {
                 return string.Format("The issue with ID {0} does not belong to user {1}", issueId, this.Data.CurrentUser.UserName);
             }
@@ -122,22 +123,22 @@
             return string.Format("Issue {0} removed", issueId);
         }
 
-        public string AddComment(int intValue, string stringValue)
+        public string AddComment(int issueId, string text)
         {
             if (this.Data.CurrentUser == null)
             {
                 return string.Format("There is no currently logged in user");
             }
 
-            if (!this.Data.issues1.ContainsKey(intValue + 1))
+            if (!this.Data.IssueById.ContainsKey(issueId))
             {
-                return string.Format("There is no issue with ID {0}", intValue + 1);
+                return string.Format("There is no issue with ID {0}", issueId);
             }
 
-            var issue = this.Data.issues1[intValue];
-            var comment = new Comment(this.Data.CurrentUser, stringValue);
+            var issue = this.Data.IssueById[issueId];
+            var comment = new Comment(this.Data.CurrentUser, text);
             issue.AddComment(comment);
-            this.Data.dict[this.Data.CurrentUser].Add(comment);
+            this.Data.CommentByUser[this.Data.CurrentUser].Add(comment);
             return string.Format("Comment added successfully to issue {0}", issue.Id);
         }
 
@@ -148,12 +149,12 @@
                 return string.Format("There is no currently logged in user");
             }
 
-            var issues = this.Data.issues2[this.Data.CurrentUser.UserName];
+            var issues = this.Data.IssuesByUsers[this.Data.CurrentUser.UserName];
             var newIssues = issues;
             if (!newIssues.Any())
             {
                 var result = string.Empty;
-                foreach (var i in this.Data.issues2)
+                foreach (var i in this.Data.IssuesByUsers)
                 {
                     result += i.Value.Select(iss => iss.Comments.Select(c => c.Text)).ToString();
                 }
@@ -172,7 +173,7 @@
             }
 
             var comments = new List<Comment>();
-            this.Data.issues1.Select(i => i.Value.Comments).ToList()
+            this.Data.IssueById.Select(i => i.Value.Comments).ToList()
                 .ForEach(item => comments.AddRange(item));
             var resultComments = comments
                 .Where(c => c.Author.UserName == this.Data.CurrentUser.UserName)
@@ -187,31 +188,27 @@
             return string.Join(Environment.NewLine, strings);
         }
 
-        public string SearchForIssues(string[] strings)
+        public string SearchForIssues(string[] tags)
         {
-            if (strings.Length < 0)
+            if (tags.Length < 0)
             {
                 return "There are no tags provided";
             }
 
-            var i = new List<Issue>();
-            foreach (var t in strings)
+            var foundIssues = new List<Issue>();
+            foreach (var tag in tags)
             {
-                i.AddRange(this.Data.issues4[t]);
+                foundIssues.AddRange(this.Data.IssuesByTag[tag]);
             }
 
-            if (!i.Any())
+            var distinctIssues = foundIssues.Distinct();
+
+            if (!distinctIssues.Any())
             {
                 return "There are no issues matching the tags provided";
             }
 
-            var newi = i.Distinct();
-            if (!newi.Any())
-            {
-                return "No issues";
-            }
-
-            return string.Join(Environment.NewLine, newi.OrderByDescending(x => x.Priority).ThenBy(x => x.Title).Select(x => string.Empty));
+            return string.Join(Environment.NewLine, distinctIssues.OrderByDescending(x => x.Priority).ThenBy(x => x.Title).Select(x => x.ToString()));
         }
     }
 }

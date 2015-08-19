@@ -36,15 +36,20 @@
                     return this.Tracker.LogoutUser();
 
                 case "CreateIssue":
-                    return this.Tracker.CreateIssue(endpoint.Parameters["title"], endpoint.Parameters["description"],
-                        (IssuePriority)System.Enum.Parse(typeof(IssuePriority), endpoint.Parameters["priority"], true),
-                        endpoint.Parameters["tags"].Split('/'));
+                    return this.Tracker.CreateIssue
+                        (endpoint.Parameters["title"], 
+                        endpoint.Parameters["description"],
+                        (IssuePriority)System.Enum.Parse(typeof(IssuePriority),
+                        endpoint.Parameters["priority"], true),
+                        endpoint.Parameters["tags"].Split('|'));
 
                 case "RemoveIssue":
                     return this.Tracker.RemoveIssue(int.Parse(endpoint.Parameters["id"]));
 
                 case "AddComment":
-                    return this.Tracker.AddComment(int.Parse(endpoint.Parameters["Id"]), endpoint.Parameters["text"]);
+                    var id = int.Parse(endpoint.Parameters["id"]);
+                    var text = endpoint.Parameters["text"];
+                    return this.Tracker.AddComment(id, text);
 
                 case "MyIssues":
                     return this.Tracker.GetMyIssues();
@@ -53,7 +58,7 @@
                     return this.Tracker.GetMyComments();
 
                 case "Search":
-                    return Tracker.SearchForIssues(endpoint.Parameters["tags"].Split('|'));
+                    return this.Tracker.SearchForIssues(endpoint.Parameters["tags"].Split('|'));
 
                 default:
                     return string.Format("Invalid action: {0}", endpoint.ActionName);

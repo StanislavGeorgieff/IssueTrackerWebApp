@@ -17,6 +17,7 @@
             this.Description = description;
             this.Priority = priority;
             this.Tags = tags;
+            this.Comments = new List<Comment>();
         }
 
         public int Id { get; set; }
@@ -72,8 +73,7 @@
         {
             var issue = new StringBuilder();
             issue.AppendLine(this.Title)
-                .AppendFormat("Priority: {0}", this.GetPriorityAsString())
-                .AppendLine()
+                .AppendFormat("Priority: {0}", this.GetPriorityAsString()).AppendLine()
                 .AppendLine(this.Description);
 
             if (this.Tags.Count > 0)

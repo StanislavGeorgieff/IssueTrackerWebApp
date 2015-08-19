@@ -14,3 +14,11 @@ C:\Users\UniUser\Desktop\IssueTrackerWebApp\buhtig\bin\Debug\IssueTrackerWebApp.
 C:\Users\UniUser\Desktop\IssueTrackerWebApp\buhtig\bin\Debug\PowerCollections.dll
 C:\Users\UniUser\Desktop\IssueTrackerWebApp\buhtig\bin\Debug\PowerCollections.xml
 C:\Users\UniUser\Desktop\IssueTrackerWebApp\buhtig\obj\Debug\IssueTrackerWebApp.csprojResolveAssemblyReference.cache
+C:\Users\Stanislav\Desktop\IssueTrackerWebApp\buhtig\bin\Debug\IssueTrackerWebApp.exe.config
+C:\Users\Stanislav\Desktop\IssueTrackerWebApp\buhtig\obj\Debug\IssueTrackerWebApp.exe
+C:\Users\Stanislav\Desktop\IssueTrackerWebApp\buhtig\obj\Debug\IssueTrackerWebApp.pdb
+C:\Users\Stanislav\Desktop\IssueTrackerWebApp\buhtig\bin\Debug\IssueTrackerWebApp.exe
+C:\Users\Stanislav\Desktop\IssueTrackerWebApp\buhtig\bin\Debug\IssueTrackerWebApp.pdb
+C:\Users\Stanislav\Desktop\IssueTrackerWebApp\buhtig\bin\Debug\PowerCollections.dll
+C:\Users\Stanislav\Desktop\IssueTrackerWebApp\buhtig\bin\Debug\PowerCollections.xml
+C:\Users\Stanislav\Desktop\IssueTrackerWebApp\buhtig\obj\Debug\IssueTrackerWebApp.csprojResolveAssemblyReference.cache

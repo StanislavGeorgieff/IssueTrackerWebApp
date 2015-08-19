@@ -8,15 +8,15 @@
     {
         User CurrentUser { get; set; }
 
-        IDictionary<string, User> users_dict { get; }
+        IDictionary<string, User> UsersByName{ get; }
 
-        OrderedDictionary<int, Issue> issues1 { get; }
+        OrderedDictionary<int, Issue> IssueById { get; }
 
-        MultiDictionary<string, Issue> issues2 { get; }
+        MultiDictionary<string, Issue> IssuesByUsers { get; }
 
-        MultiDictionary<string, Issue> issues4 { get; }
+        MultiDictionary<string, Issue> IssuesByTag { get; }
 
-        MultiDictionary<User, Comment> dict { get; }
+        MultiDictionary<User, Comment> CommentByUser { get; }
 
         int AddIssue(Issue issue);
 
